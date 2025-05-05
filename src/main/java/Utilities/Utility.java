@@ -46,6 +46,7 @@ public class Utility {
         General_Explicit_wait(driver).until(ExpectedConditions.elementToBeClickable(locator));
         // Click on Element
         driver.findElement(locator).click();
+
     }
 
     //TODO Get text
