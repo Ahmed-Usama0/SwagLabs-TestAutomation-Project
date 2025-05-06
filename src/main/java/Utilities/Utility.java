@@ -1,5 +1,7 @@
 package Utilities;
 
+import com.assertthat.selenium_shutterbug.core.Capture;
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import io.qameta.allure.Allure;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
@@ -13,6 +15,9 @@ import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 public class Utility {
     private static final String SCREENSHOTS_PATH = "Test_Outputs/ScreenShots/";
@@ -85,6 +90,30 @@ public class Utility {
             e.getStackTrace();
         }
 
+    }
+    //ToDo Taking Screenshot Using Shutterbug
+    public static void Taking_Full_ScreenShot(WebDriver driver){
+        try{
+            Shutterbug.shootPage(driver, Capture.FULL_SCROLL).save(SCREENSHOTS_PATH);
+        } catch (Exception e) {
+            LogsUtils.error(e.getMessage());
+        }
+
 
     }
+    //ToDo Generate Rondom Number
+    public static int Generate_Rondom_Number(int upperbound){
+        return new Random().nextInt(upperbound)+1;
+    }
+
+    //ToDo Generate a Set of Rondom Values
+    public static Set<Integer> Generate_a_Set_of_Rondom_Values(int number_of_products, int total_number_of_products){
+      Set<Integer> generatednumbers=new HashSet<>();
+      while(generatednumbers.size()<number_of_products){
+          int rodomvalue=Generate_Rondom_Number(total_number_of_products);
+          generatednumbers.add(rodomvalue);
+      }
+      return generatednumbers;
+    }
+
 }

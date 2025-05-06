@@ -6,8 +6,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import java.util.List;
+import java.util.Set;
 
 public class P02_HomePage {
+    private final int  total_Number_Of_Products;
     private static List<WebElement> all_products;
     private static List<WebElement> Selected_products;
     private final WebDriver driver;
@@ -15,13 +17,17 @@ public class P02_HomePage {
     private final By Add_To_Cart_Button_For_All_Products=By.xpath("//button[@class]");
     private final By Number_Of_Selected_Products_On_Cart=By.className("shopping_cart_badge");
     private final By Number_Of_Selected_Items=By.xpath("//button[text()='Remove']");
+
     //constructor
     public P02_HomePage(WebDriver driver) {
         this.driver = driver;
+        all_products=driver.findElements(Add_To_Cart_Button_For_All_Products);
+        total_Number_Of_Products=all_products.size();
+
     }
+
     //Methods Used For Actions on Elements
     public P02_HomePage Select_All_Products(){
-        all_products=driver.findElements(Add_To_Cart_Button_For_All_Products);
         LogsUtils.info("The Number Of All Products is"+ all_products.size());
         for(int i=1;i<=all_products.size();i++){
            By Dynamic_Locator=By.xpath("(//button[@class])[" + i + "]");
@@ -56,4 +62,17 @@ public class P02_HomePage {
        return Get_Number_Of_Selected_Products_On_Cart().equals(Get_Number_Of_Selected_Products());
     }
 
+
+    public P02_HomePage Add_Random_Products(int number_of_products, int total_number_of_products){
+        Set<Integer> random_numbers=Utility.Generate_a_Set_of_Rondom_Values(number_of_products,total_number_of_products);
+        for(int i:random_numbers){
+            By Dynamic_Locator=By.xpath("(//button[@class])[" + i + "]");
+            Utility.Clicking_On_Element(driver,Dynamic_Locator);
+        }
+        return this;
+    }
+
+    public int Get_Total_Products(){
+        return this.total_Number_Of_Products;
+    }
 }

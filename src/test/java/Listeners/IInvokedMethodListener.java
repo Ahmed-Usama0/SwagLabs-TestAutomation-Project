@@ -15,6 +15,7 @@ public class IInvokedMethodListener implements org.testng.IInvokedMethodListener
             case ITestResult.FAILURE:
                 LogsUtils.info("Test Case " + testResult.getName() + " failed");
                 Utility.TakeScreenshot(Get_Driver(), testResult.getName());
+                Utility.Taking_Full_ScreenShot(Get_Driver());
                 break;
             case ITestResult.SUCCESS:
                 LogsUtils.info("Test Case " + testResult.getName() + " passed");
