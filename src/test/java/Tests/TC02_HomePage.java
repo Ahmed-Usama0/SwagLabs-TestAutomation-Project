@@ -1,6 +1,8 @@
 package Tests;
 
 import DriverFactory.DriverFactory;
+import Listeners.IInvokedMethodListener;
+import Listeners.ITestResultListeners;
 import Pages.P01_LoginPage;
 import Pages.P02_HomePage;
 import Utilities.DataUtils;
@@ -10,17 +12,16 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import Listeners.IInvokedMethodListener;
-import Listeners.ITestResultListeners;
-
 
 import java.time.Duration;
+
 @Listeners({ITestResultListeners.class, IInvokedMethodListener.class})
 public class TC02_HomePage {
     //Data
     private final String validUserName = DataUtils.GetJsonData("LoginData", "validUserName");
     private final String validPassword = DataUtils.GetJsonData("LoginData", "validPassword");
-    private final String Cart_Page_Url = DataUtils.GetPropertyValue("Environment", "https://www.saucedemo.com/cart.html");
+    private final String Cart_Page_Url = DataUtils.GetPropertyValue("Environment", "Cart_Page_URL");
+
     @BeforeMethod
     public void SetUp() {
         //Data
@@ -41,8 +42,9 @@ public class TC02_HomePage {
         new P01_LoginPage(DriverFactory.Get_Driver())
                 .Enter_UserName(validUserName).
                 Enter_Password(validPassword).
-                Click_On_LoginButton().
-                Select_All_Products();
+                Click_On_LoginButton();
+        //ToDo Home Page Steps
+        new P02_HomePage(DriverFactory.Get_Driver()).Select_All_Products();
         //ToDo Assertion
         Assert.assertTrue(new P02_HomePage(DriverFactory.Get_Driver()).Comparing_Number_Of_Selected_Products_With_Cart());
 
@@ -54,8 +56,9 @@ public class TC02_HomePage {
         new P01_LoginPage(DriverFactory.Get_Driver())
                 .Enter_UserName(validUserName).
                 Enter_Password(validPassword).
-                Click_On_LoginButton().
-                Add_Random_Products(Utility.Generate_Rondom_Number(new P02_HomePage(DriverFactory.Get_Driver()).Get_Total_Products()),new P02_HomePage(DriverFactory.Get_Driver()).Get_Total_Products());
+                Click_On_LoginButton();
+        //ToDo Home Page Steps
+        new P02_HomePage(DriverFactory.Get_Driver()).Add_Random_Products(Utility.Generate_Rondom_Number(new P02_HomePage(DriverFactory.Get_Driver()).Get_Total_Products()), new P02_HomePage(DriverFactory.Get_Driver()).Get_Total_Products());
         //ToDo Assertion
         Assert.assertTrue(new P02_HomePage(DriverFactory.Get_Driver()).Comparing_Number_Of_Selected_Products_With_Cart());
 
@@ -67,11 +70,11 @@ public class TC02_HomePage {
         new P01_LoginPage(DriverFactory.Get_Driver())
                 .Enter_UserName(validUserName).
                 Enter_Password(validPassword).
-                Click_On_LoginButton().
-                Click_On_Cart_Icon();
-
+                Click_On_LoginButton();
+        //ToDo Home Page Steps
+        new P02_HomePage(DriverFactory.Get_Driver()).Click_On_Cart_Icon();
         //ToDo Assertion
-        Assert.assertTrue(new P02_HomePage(DriverFactory.Get_Driver()).Verify_Cart_Page_Url(Cart_Page_Url));
+        Assert.assertTrue(Utility.Verify_Url(DriverFactory.Get_Driver(), Cart_Page_Url));
 
     }
 

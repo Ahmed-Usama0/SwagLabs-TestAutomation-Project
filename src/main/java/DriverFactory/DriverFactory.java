@@ -6,7 +6,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class DriverFactory {
     private static final ThreadLocal<WebDriver> driverThreadlocal = new ThreadLocal<WebDriver>();
@@ -22,9 +21,7 @@ public class DriverFactory {
                 driverThreadlocal.set(new ChromeDriver(chromeOptions));
                 break;
             case "firefox":
-                FirefoxOptions firefoxOptions = new FirefoxOptions();
-                firefoxOptions.addArguments("--start-maximized");
-                driverThreadlocal.set(new FirefoxDriver(firefoxOptions));
+                driverThreadlocal.set(new FirefoxDriver());
                 break;
             default:
                 EdgeOptions edgeOptions = new EdgeOptions();

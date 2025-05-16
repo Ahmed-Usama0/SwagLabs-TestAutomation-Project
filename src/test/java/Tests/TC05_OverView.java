@@ -5,21 +5,30 @@ import Listeners.IInvokedMethodListener;
 import Listeners.ITestResultListeners;
 import Pages.P01_LoginPage;
 import Pages.P02_HomePage;
-import Pages.P03_CartPage;
+import Pages.P04_CheckOut;
+import Pages.P05_OverView;
 import Utilities.DataUtils;
 import Utilities.Utility;
-import org.testng.Assert;
+import com.github.javafaker.Faker;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 
 @Listeners({ITestResultListeners.class, IInvokedMethodListener.class})
-public class TC03_CartPage {
+public class TC05_OverView {
+    //Data
+    private final String First_Name = DataUtils.GetJsonData("CheckOut_Info", "FirstName") + "-" + Utility.getTimeStamp();
+    private final String Last_Name = DataUtils.GetJsonData("CheckOut_Info", "LastName") + "-" + Utility.getTimeStamp();
+    private final String Postal_Code = new Faker().number().digits(5);
     private final String validUserName = DataUtils.GetJsonData("LoginData", "validUserName");
     private final String validPassword = DataUtils.GetJsonData("LoginData", "validPassword");
+    private final String CheckOut_URl = DataUtils.GetPropertyValue("Environment", "Check_Out_URL");
+    //SoftAssert
+    SoftAssert softAssert = new SoftAssert();
 
     @BeforeMethod
     public void SetUp() {
@@ -35,7 +44,7 @@ public class TC03_CartPage {
     }
 
     @Test
-    public void Checking_Number_Of_Selected_Products_TC() {
+    public void CheckOut_StepTwo_TC() {
         //ToDo Login Steps
         new P01_LoginPage(DriverFactory.Get_Driver())
                 .Enter_UserName(validUserName).
@@ -44,11 +53,22 @@ public class TC03_CartPage {
         //ToDo Home Page Steps
         String Total_Price = new P02_HomePage(DriverFactory.Get_Driver()).Add_Random_Products(Utility.Generate_Rondom_Number(new P02_HomePage(DriverFactory.Get_Driver()).Get_Total_Products()), new P02_HomePage(DriverFactory.Get_Driver()).Get_Total_Products()).Get_Prices_Of_Selected_Products();
         System.out.println(Total_Price);
-        //ToDo Cart Page
-        new P02_HomePage(DriverFactory.Get_Driver()).Click_On_Cart_Icon();
-
+        //ToDo Cart Page Steps
+        new P02_HomePage(DriverFactory.Get_Driver()).Click_On_Cart_Icon().
+                Click_On_Check_Out_Button();
+        //ToDo CheckOut Steps
+        new P04_CheckOut(DriverFactory.Get_Driver()).
+                Send_First_Name_Data(First_Name).
+                Send_Last_Name_Data(Last_Name).
+                Send_Postal_Code_Data(Postal_Code).
+                Click_On_continue_Button();
+        //ToDo OverView Steps
+        String Sub_Total = String.valueOf(new P05_OverView(DriverFactory.Get_Driver()).Get_Sub_Total());
+        System.out.println(Sub_Total);
         //ToDo Assertion
-        Assert.assertTrue(new P03_CartPage(DriverFactory.Get_Driver()).Comparing_Prices(Total_Price));
+        softAssert.assertTrue(Total_Price.equals(Sub_Total));
+        softAssert.assertTrue(new P05_OverView(DriverFactory.Get_Driver()).Comparing_Prices());
+        softAssert.assertAll();
 
     }
 

@@ -34,7 +34,7 @@ public class Utility {
 
     //ToDO general Explicit Wait
     public static WebDriverWait General_Explicit_wait(WebDriver driver) {
-        return new WebDriverWait(driver, Duration.ofSeconds(5));
+        return new WebDriverWait(driver, Duration.ofSeconds(3));
     }
 
     //ToDO Send Data to text field
@@ -69,10 +69,11 @@ public class Utility {
     }
 
     //TODo scrolling using java-script-executor
-    public static void Scrolling(WebDriver driver, By locator){
+    public static void Scrolling(WebDriver driver, By locator) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", Find_WebElement(driver, locator));
 
     }
+
     //ToDo Taking ScreenShot Using Selenium
     public static void TakeScreenshot(WebDriver driver, String screenshotName) {
         try {
@@ -91,9 +92,10 @@ public class Utility {
         }
 
     }
+
     //ToDo Taking Screenshot Using Shutterbug
-    public static void Taking_Full_ScreenShot(WebDriver driver){
-        try{
+    public static void Taking_Full_ScreenShot(WebDriver driver) {
+        try {
             Shutterbug.shootPage(driver, Capture.FULL_SCROLL).save(SCREENSHOTS_PATH);
         } catch (Exception e) {
             LogsUtils.error(e.getMessage());
@@ -101,19 +103,32 @@ public class Utility {
 
 
     }
+
     //ToDo Generate Rondom Number
-    public static int Generate_Rondom_Number(int upperbound){
-        return new Random().nextInt(upperbound)+1;
+    public static int Generate_Rondom_Number(int upperbound) {
+        return new Random().nextInt(upperbound) + 1;
     }
 
     //ToDo Generate a Set of Rondom Values
-    public static Set<Integer> Generate_a_Set_of_Rondom_Values(int number_of_products, int total_number_of_products){
-      Set<Integer> generatednumbers=new HashSet<>();
-      while(generatednumbers.size()<number_of_products){
-          int rodomvalue=Generate_Rondom_Number(total_number_of_products);
-          generatednumbers.add(rodomvalue);
-      }
-      return generatednumbers;
+    public static Set<Integer> Generate_a_Set_of_Rondom_Values(int number_of_products, int total_number_of_products) {
+        Set<Integer> generatednumbers = new HashSet<>();
+        while (generatednumbers.size() < number_of_products) {
+            int rodomvalue = Generate_Rondom_Number(total_number_of_products);
+            generatednumbers.add(rodomvalue);
+        }
+        return generatednumbers;
+    }
+
+    //ToDo Verify Url
+    public static Boolean Verify_Url(WebDriver driver, String url) {
+        try {
+            Utility.General_Explicit_wait(driver).until(ExpectedConditions.urlToBe(url));
+            return true;
+        } catch (Exception e) {
+            LogsUtils.error(e.getMessage());
+            return false;
+        }
+
     }
 
 }
