@@ -2,6 +2,8 @@ package Pages;
 
 import Utilities.LogsUtils;
 import Utilities.Utility;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,6 +31,8 @@ public class P02_HomePage {
     }
 
     //Methods Used For Actions on Elements
+
+    @Step("Select all products on the page")
     public P02_HomePage Select_All_Products() {
 
         LogsUtils.info("The Number Of All Products is" + all_products.size());
@@ -39,6 +43,7 @@ public class P02_HomePage {
         return this;
     }
 
+    @Step("Get number of selected products on cart icon")
     public String Get_Number_Of_Selected_Products_On_Cart() {
         try {
             LogsUtils.info(Utility.Get_Text(driver, Number_Of_Selected_Products_On_Cart));
@@ -50,6 +55,7 @@ public class P02_HomePage {
         }
     }
 
+    @Step("Get number of selected (Remove) items")
     public String Get_Number_Of_Selected_Products() {
         try {
             Selected_products = driver.findElements(Number_Of_Selected_Items);
@@ -63,11 +69,19 @@ public class P02_HomePage {
 
     }
 
-    public Boolean Comparing_Number_Of_Selected_Products_With_Cart() {
-        return Get_Number_Of_Selected_Products_On_Cart().equals(Get_Number_Of_Selected_Products());
+    @Step("Compare number of products in cart icon vs selected items")
+    public void Comparing_Number_Of_Selected_Products_With_Cart() {
+        String cartCount = Get_Number_Of_Selected_Products_On_Cart();
+        String selectedCount = Get_Number_Of_Selected_Products();
+        if (!cartCount.equals(selectedCount)) {
+            String errorMsg = String.format("❌ Mismatch: Cart icon shows %s, but selected items are %s",
+                    cartCount, selectedCount);
+            throw new AssertionError(errorMsg); // This marks the step as failed in Allure
+        }
+
     }
 
-
+    @Step("Add {number_of_products} random products (out of {total_number_of_products} total)")
     public P02_HomePage Add_Random_Products(int number_of_products, int total_number_of_products) {
         Set<Integer> random_numbers = Utility.Generate_a_Set_of_Rondom_Values(number_of_products, total_number_of_products);
         for (int i : random_numbers) {
@@ -81,12 +95,13 @@ public class P02_HomePage {
         return all_products.size();
     }
 
-
+    @Step("Click on cart icon to go to cart page")
     public P03_CartPage Click_On_Cart_Icon() {
         Utility.Clicking_On_Element(driver, Cart_Icon);
         return new P03_CartPage(driver);
     }
 
+    @Step("Calculate total price of selected products")
     public String Get_Prices_Of_Selected_Products() {
         try {
             Prices_Of_Selected_Products = driver.findElements(Prices_Of_Selected_Products_Locator);
@@ -95,6 +110,7 @@ public class P02_HomePage {
                 String price = Utility.Get_Text(driver, Dynamic_Locator).replace("$", "");
                 Total_prices += Float.parseFloat(price);
             }
+            Allure.addAttachment("Total_prices", String.valueOf(Total_prices));
             return String.valueOf(Total_prices);
 
         } catch (Exception e) {

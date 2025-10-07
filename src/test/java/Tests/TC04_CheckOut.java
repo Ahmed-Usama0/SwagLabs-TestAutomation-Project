@@ -9,7 +9,6 @@ import Pages.P04_CheckOut;
 import Utilities.DataUtils;
 import Utilities.Utility;
 import com.github.javafaker.Faker;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -60,7 +59,7 @@ public class TC04_CheckOut {
                 Send_Postal_Code_Data(Postal_Code).
                 Click_On_continue_Button();
         //ToDo Assertion
-        Assert.assertTrue(Utility.Verify_Url(DriverFactory.Get_Driver(), CheckOut_URl));
+        Utility.Verify_Url(CheckOut_URl);
 
     }
 
