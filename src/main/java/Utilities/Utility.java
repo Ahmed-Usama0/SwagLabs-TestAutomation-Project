@@ -1,8 +1,10 @@
 package Utilities;
 
+import DriverFactory.DriverFactory;
 import com.assertthat.selenium_shutterbug.core.Capture;
 import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -120,13 +122,17 @@ public class Utility {
     }
 
     //ToDo Verify Url
-    public static Boolean Verify_Url(WebDriver driver, String url) {
+    @Step("Verify browser URL is: {url}")
+    public static void Verify_Url(String url) {
+        WebDriver driver = DriverFactory.Get_Driver();
         try {
+
             Utility.General_Explicit_wait(driver).until(ExpectedConditions.urlToBe(url));
-            return true;
+
         } catch (Exception e) {
-            LogsUtils.error(e.getMessage());
-            return false;
+            String currentUrl = driver.getCurrentUrl();
+            String message = String.format("❌ URL mismatch. Expected: %s, but was: %s", url, currentUrl);
+            throw new AssertionError(message); // Marks the step as failed in Allure
         }
 
     }

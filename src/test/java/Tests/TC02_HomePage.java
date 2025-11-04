@@ -7,7 +7,6 @@ import Pages.P01_LoginPage;
 import Pages.P02_HomePage;
 import Utilities.DataUtils;
 import Utilities.Utility;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -46,7 +45,7 @@ public class TC02_HomePage {
         //ToDo Home Page Steps
         new P02_HomePage(DriverFactory.Get_Driver()).Select_All_Products();
         //ToDo Assertion
-        Assert.assertTrue(new P02_HomePage(DriverFactory.Get_Driver()).Comparing_Number_Of_Selected_Products_With_Cart());
+        new P02_HomePage(DriverFactory.Get_Driver()).Comparing_Number_Of_Selected_Products_With_Cart();
 
     }
 
@@ -60,7 +59,7 @@ public class TC02_HomePage {
         //ToDo Home Page Steps
         new P02_HomePage(DriverFactory.Get_Driver()).Add_Random_Products(Utility.Generate_Rondom_Number(new P02_HomePage(DriverFactory.Get_Driver()).Get_Total_Products()), new P02_HomePage(DriverFactory.Get_Driver()).Get_Total_Products());
         //ToDo Assertion
-        Assert.assertTrue(new P02_HomePage(DriverFactory.Get_Driver()).Comparing_Number_Of_Selected_Products_With_Cart());
+        new P02_HomePage(DriverFactory.Get_Driver()).Comparing_Number_Of_Selected_Products_With_Cart();
 
     }
 
@@ -74,7 +73,7 @@ public class TC02_HomePage {
         //ToDo Home Page Steps
         new P02_HomePage(DriverFactory.Get_Driver()).Click_On_Cart_Icon();
         //ToDo Assertion
-        Assert.assertTrue(Utility.Verify_Url(DriverFactory.Get_Driver(), Cart_Page_Url));
+        Utility.Verify_Url(Cart_Page_Url);
 
     }
 

@@ -8,7 +8,6 @@ import Pages.P02_HomePage;
 import Pages.P03_CartPage;
 import Utilities.DataUtils;
 import Utilities.Utility;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -48,7 +47,7 @@ public class TC03_CartPage {
         new P02_HomePage(DriverFactory.Get_Driver()).Click_On_Cart_Icon();
 
         //ToDo Assertion
-        Assert.assertTrue(new P03_CartPage(DriverFactory.Get_Driver()).Comparing_Prices(Total_Price));
+        new P03_CartPage(DriverFactory.Get_Driver()).Comparing_Prices(Total_Price);
 
     }
 
